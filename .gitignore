@@ -1,0 +1,11 @@
+# Environment and config files
+.env
+config.json
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Dependencies or virtual environments (e.g., Python venv or Node modules)
+venv/
+node_modules/
