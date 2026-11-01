@@ -67,7 +67,7 @@
 The deployment follows a **2+2 scaling architecture**: a frontend tier and a backend tier, each made of two identical EC2 instances behind its own internet-facing Application Load Balancer. The backend instances connect to a MongoDB Atlas cluster over port `27017`.
  
 <p align="center">
-  <img src="docs/images/architecture-diagram.png" alt="RoamLog AWS deployment architecture diagram" width="760">
+  <img src="https://github.com/user-attachments/assets/63709e7a-69a9-4148-b0c0-33a8c41a0a5d" alt="RoamLog AWS deployment architecture diagram" width="760">
 </p>
 <p align="center"><em>RoamLog deployment architecture on AWS</em></p>
 ### Request flow
@@ -261,7 +261,7 @@ This section documents the production deployment on AWS (region `ap-south-1`, Mu
  
 Four instances make up the 2+2 layout: `frontend-master`, `backend-master`, `frontend-2` and `backend-2`. All of them are `t4g.nano` instances in `ap-south-1b`, are in the **Running** state, and pass **3/3 status checks**.
  
-![EC2 instances — all four running with 3/3 status checks](docs/images/01-ec2-instances.png)
+![EC2 instances — all four running with 3/3 status checks](https://github.com/user-attachments/assets/bb8705a4-f55f-483e-97bc-2d58d4e8dc42)
  
 *EC2 console: four running instances*
  
@@ -270,17 +270,14 @@ Four instances make up the 2+2 layout: `frontend-master`, `backend-master`, `fro
  
 Golden images were created from the two master instances — `travelmemory-frontend-ami` and `travelmemory-backend-ami` — so that each tier can be scaled horizontally. The second instance of each tier (`frontend-2`, `backend-2`) is the scaled-out copy.
  
-<!-- TODO: add the AMI list screenshot as docs/images/02-amis.png and uncomment the next two lines.
-![Amazon Machine Images — frontend and backend AMIs](docs/images/02-amis.png)
-*EC2 console: AMIs created from the master instances*
--->
- 
+![Amazon Machine Images — frontend and backend AMIs](https://github.com/user-attachments/assets/cdc2a2aa-c4a0-4033-b852-5cb7e1c21eaf)
+
 <a id="deploy-sg"></a>
 ### Step 3 — Network security: security groups
  
 Two dedicated security groups are used: `travelmemory-alb-sg` for the load balancers and `travelmemory-ec2-sg` for the EC2 instances.
- 
-![Security groups overview with travelmemory-ec2-sg and travelmemory-alb-sg highlighted](docs/images/03-security-groups-overview.png)
+ ![Security groups overview with travelmemory-ec2-sg and travelmemory-alb-sg highlighted](https://github.com/user-attachments/assets/1c855afc-6de1-4e7b-b937-dd7f5e3d71ec)
+
  
 *Security groups overview (the two project groups are highlighted)*
  
@@ -288,7 +285,8 @@ Two dedicated security groups are used: `travelmemory-alb-sg` for the load balan
  
 Public-facing group for the load balancers. It allows inbound **HTTP (80)** and **HTTPS (443)** from the internet (`0.0.0.0/0`).
  
-![travelmemory-alb-sg inbound rules — HTTPS 443 and HTTP 80](docs/images/04-alb-security-group.png)
+![travelmemory-alb-sg inbound rules — HTTPS 443 and HTTP 80](https://github.com/user-attachments/assets/62af6d1b-b529-4c2c-9925-0e3f7a6e3ba2)
+
  
 *`travelmemory-alb-sg` inbound rules*
  
@@ -296,7 +294,8 @@ Public-facing group for the load balancers. It allows inbound **HTTP (80)** and 
  
 Group attached to the application instances. Its inbound rules open **TCP 3001** (backend application port), **HTTP 80** and **SSH 22**.
  
-![travelmemory-ec2-sg inbound rules — TCP 3001, HTTP 80 and SSH 22](docs/images/05-ec2-security-group.png)
+![travelmemory-ec2-sg inbound rules — TCP 3001, HTTP 80 and SSH 22](https://github.com/user-attachments/assets/808e2a6c-4ceb-44fb-a6b3-29c674898f18)
+
  
 *`travelmemory-ec2-sg` inbound rules*
  
@@ -305,7 +304,8 @@ Group attached to the application instances. Its inbound rules open **TCP 3001**
  
 Two target groups group the instances of each tier for traffic distribution: `travelmemory-backend-tg` and `travelmemory-frontend-tg`. Both use **HTTP on port 80** with target type **Instance**.
  
-![Target groups — travelmemory-backend-tg and travelmemory-frontend-tg](docs/images/06-target-groups.png)
+![Target groups — travelmemory-backend-tg and travelmemory-frontend-tg](https://github.com/user-attachments/assets/9e5b1d70-db71-4456-897b-81acbf53fbc5)
+
  
 *Target groups for the backend and frontend tiers*
  
@@ -314,7 +314,8 @@ Two target groups group the instances of each tier for traffic distribution: `tr
  
 Two internet-facing Application Load Balancers — `travelmemory-backend-alb` and `travelmemory-frontend-alb` — are **Active** and span three Availability Zones (`ap-south-1a`, `1b`, `1c`).
  
-![Load balancers overview — both ALBs active](docs/images/07-load-balancers-overview.png)
+![Load balancers overview — both ALBs active](https://github.com/user-attachments/assets/9450623b-317e-4d2e-9d68-58efa84bfa40)
+
  
 *Load balancers overview*
  
@@ -324,19 +325,22 @@ Created on **October 25, 2026**. The listener forwards **HTTP:80** to `travelmem
  
 **Details**
  
-![travelmemory-backend-alb details](docs/images/08-backend-alb-details.png)
+![travelmemory-backend-alb details](https://github.com/user-attachments/assets/db2cd135-89d5-4d60-a66d-5ca850e77c9d)
+
  
 *Backend ALB details*
  
 **Listeners and rules**
  
-![Backend ALB listener — HTTP:80 forwards to travelmemory-backend-tg](docs/images/09-backend-alb-listeners.png)
+![Backend ALB listener — HTTP:80 forwards to travelmemory-backend-tg](https://github.com/user-attachments/assets/d7030226-7429-4cc3-ab5f-a01b835ca170)
+
  
 *Backend ALB listener: HTTP:80 → `travelmemory-backend-tg`*
  
 **Resource map**
  
-![Backend ALB resource map — 2 healthy targets](docs/images/10-backend-alb-resource-map.png)
+![Backend ALB resource map — 2 healthy targets](https://github.com/user-attachments/assets/dd751ad3-ec32-437e-b1b9-851d8f903ea5)
+
  
 *Backend ALB resource map: listener → rule → target group → 2 healthy targets*
  
@@ -346,19 +350,22 @@ Created on **October 26, 2026**. The listener forwards **HTTP:80** to `travelmem
  
 **Details**
  
-![travelmemory-frontend-alb details](docs/images/11-frontend-alb-details.png)
+![travelmemory-frontend-alb details](https://github.com/user-attachments/assets/cb5c11b1-0d2e-457a-a63e-ab86d98f958d)
+
  
 *Frontend ALB details*
  
 **Listeners and rules**
  
-![Frontend ALB listener — HTTP:80 forwards to travelmemory-frontend-tg](docs/images/12-frontend-alb-listeners.png)
+![Frontend ALB listener — HTTP:80 forwards to travelmemory-frontend-tg](https://github.com/user-attachments/assets/9b51e26e-89db-4694-b430-026266b6e416)
+
  
 *Frontend ALB listener: HTTP:80 → `travelmemory-frontend-tg`*
  
 **Resource map**
  
-![Frontend ALB resource map — 2 healthy targets](docs/images/13-frontend-alb-resource-map.png)
+![Frontend ALB resource map — 2 healthy targets](https://github.com/user-attachments/assets/b84a06f6-097e-4b41-a54d-16af7b032a72)
+
  
 *Frontend ALB resource map: listener → rule → target group → 2 healthy targets*
  
@@ -374,7 +381,7 @@ curl http://travelmemory-backend-alb-526197863.ap-south-1.elb.amazonaws.com/hell
 # Hello World!
 ```
  
-![Backend health check — /hello returns Hello World!](docs/images/14-backend-health-check.png)
+![Backend health check — /hello returns Hello World!](https://github.com/user-attachments/assets/2ae5d738-f4d5-4b2f-957f-83490d052955)
  
 *Backend ALB `/hello` health check*
  
@@ -382,7 +389,7 @@ curl http://travelmemory-backend-alb-526197863.ap-south-1.elb.amazonaws.com/hell
  
 The RoamLog UI loads through the frontend ALB DNS name. The screenshot below shows the empty state of a fresh database (**0 Journeys Logged**); the search bar and the time-based category filters (Last Month, Last 6 Month, Last Year, Last Memories) are rendered as expected.
  
-![RoamLog frontend served through the frontend ALB](docs/images/15-frontend-app.png)
+![RoamLog frontend served through the frontend ALB](https://github.com/user-attachments/assets/33da9147-1295-4282-9a44-0967cd038a85)
  
 *RoamLog served via `travelmemory-frontend-alb`*
  
